@@ -1,0 +1,41 @@
+import pandas as pd
+import numpy as np
+
+# Đọc dữ liệu
+data = pd.read_csv('subset-covid-data.csv', header=0, encoding='ISO-8859-1')
+# Hiển thị 5 dòng đầu
+# data.head(10)
+print('*'*20,'Nhập dữ liệu thành công','*'*20)
+display(data)
+
+# Số lượng dòng và cột của bộ dữ liệu
+data.info()
+
+# Tìm hiểu xem dữ liệu được thống kê cho những ngày nào
+data.date.value_counts()
+
+# Lọc dữ liệu nhiễu
+cleaned_data = data[data.date=='2020-04-12']
+# Vẽ biểu đồ phân bố số lượng ca mắc mới ở các quốc gia
+print('Trung bình số ca mắc mới: ' + str(cleaned_data.cases.mean()))
+print('Trung vị của số ca mắc mới: '+ str(cleaned_data.cases.median()))
+import matplotlib.pyplot as plt
+
+plt.hist(cleaned_data.cases, bins = 200)
+plt.title('Phân bố số ca mắc mới')
+plt.xlabel('Số số ca mắc mới ')
+plt.ylabel('Số lượng quốc gia')
+
+# Tổng số ca mắc mới, số ca tử vong ở từng châu lục
+print('Tổng số ca nhiễm và số ca tử vong của các châu lục')
+cleaned_data.groupby('continent')['cases','deaths'].sum()
+
+# Tốp 5 quốc gia có số ca nhiễm mới cao nhất
+print('5 quốc gia có số ca nhiễm mới cao nhất là')
+data = data.sort_values('cases',ascending = False)
+data.head(5)
+
+# Tốp 5 quốc gia có số người tử vong cao nhất
+print('5 quốc gia có số ca tử vong cao nhất là: ')
+data = data.sort_values('deaths', ascending = False)
+data.head(5)
